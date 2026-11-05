@@ -42,8 +42,21 @@ data class ThemeTokens(
     val codeString: Color,
     val codeNumber: Color,
     val codeComment: Color,
-    val codeError: Color
 ) {
+    // Compatibility accessors for UI components
+    val surfaceColor: Color get() = surface
+    val textColor: Color get() = onSurface
+    val primaryColor: Color get() = primary
+    val onPrimaryColor: Color get() = onPrimary
+    val backgroundColor: Color get() = surface
+    val secondaryTextColor: Color get() = onSurfaceMuted
+    val onSurfaceColor: Color get() = onSurface
+    val onBackgroundColor: Color get() = onSurface
+    val borderColor: Color get() = outline
+    val border: Color get() = outline
+    val dividerColor: Color get() = outline
+    val errorColor: Color get() = error
+
     fun toJson(): String {
         val obj = JSONObject()
         obj.put("name", name)
