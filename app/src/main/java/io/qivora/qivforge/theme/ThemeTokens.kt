@@ -42,6 +42,7 @@ data class ThemeTokens(
     val codeString: Color,
     val codeNumber: Color,
     val codeComment: Color,
+    val codeError: Color
 ) {
     // Compatibility accessors for UI components
     val surfaceColor: Color get() = surface
@@ -160,3 +161,25 @@ data class ThemeTokens(
         }
     }
 }
+
+// Extensions for State<ThemeTokens> (when used via ThemeManager.currentTheme)
+val androidx.compose.runtime.State<ThemeTokens>.surfaceColor: Color get() = value.surfaceColor
+val androidx.compose.runtime.State<ThemeTokens>.onSurfaceColor: Color get() = value.onSurfaceColor
+val androidx.compose.runtime.State<ThemeTokens>.onBackgroundColor: Color get() = value.onBackgroundColor
+val androidx.compose.runtime.State<ThemeTokens>.primaryColor: Color get() = value.primaryColor
+val androidx.compose.runtime.State<ThemeTokens>.onPrimaryColor: Color get() = value.onPrimaryColor
+val androidx.compose.runtime.State<ThemeTokens>.backgroundColor: Color get() = value.backgroundColor
+val androidx.compose.runtime.State<ThemeTokens>.textColor: Color get() = value.textColor
+val androidx.compose.runtime.State<ThemeTokens>.secondaryTextColor: Color get() = value.secondaryTextColor
+val androidx.compose.runtime.State<ThemeTokens>.borderColor: Color get() = value.borderColor
+val androidx.compose.runtime.State<ThemeTokens>.border: Color get() = value.border
+val androidx.compose.runtime.State<ThemeTokens>.dividerColor: Color get() = value.dividerColor
+val androidx.compose.runtime.State<ThemeTokens>.errorColor: Color get() = value.errorColor
+val androidx.compose.runtime.State<ThemeTokens>.surface: Color get() = value.surface
+val androidx.compose.runtime.State<ThemeTokens>.panel: Color get() = value.panel
+val androidx.compose.runtime.State<ThemeTokens>.panelAlt: Color get() = value.panelAlt
+val androidx.compose.runtime.State<ThemeTokens>.primary: Color get() = value.primary
+val androidx.compose.runtime.State<ThemeTokens>.secondary: Color get() = value.secondary
+val androidx.compose.runtime.State<ThemeTokens>.accent: Color get() = value.accent
+val androidx.compose.runtime.State<ThemeTokens>.outline: Color get() = value.outline
+
