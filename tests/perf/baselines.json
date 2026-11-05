@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "targetDevice": "Snapdragon 7-series (6 GB RAM, Android 13)",
+  "referenceFps": 60,
+  "frameTimeBudgetMs": 16.67,
+  "budgets": {
+    "physicsStepAverageMs": 4.0,
+    "instantPlaySnapshotRestoreMs": 300.0,
+    "hud60WidgetsUpdateMs": 0.30,
+    "vfx2000ParticlesUpdateMs": 0.15,
+    "audioDspBlockMs": 1.5,
+    "qpkLookupMicroseconds": 10.0,
+    "apkExportSeconds": 90.0,
+    "soakMemoryGrowthMb": 50.0
+  },
+  "templates": {
+    "blank_world": {
+      "frameTimeP95Ms": 1.2,
+      "physicsStepMs": 0.001,
+      "ramUsageMb": 115,
+      "apkExportSizeMb": 42.5
+    },
+    "tractor_simulator": {
+      "frameTimeP95Ms": 12.8,
+      "physicsStepMs": 0.0018,
+      "ramUsageMb": 280,
+      "apkExportSizeMb": 68.4
+    },
+    "tps_arena": {
+      "frameTimeP95Ms": 14.1,
+      "physicsStepMs": 0.0019,
+      "ramUsageMb": 310,
+      "apkExportSizeMb": 78.2
+    },
+    "racing_track": {
+      "frameTimeP95Ms": 13.5,
+      "physicsStepMs": 0.0022,
+      "ramUsageMb": 295,
+      "apkExportSizeMb": 74.0
+    },
+    "hud_playground": {
+      "frameTimeP95Ms": 4.5,
+      "physicsStepMs": 0.001,
+      "ramUsageMb": 140,
+      "apkExportSizeMb": 48.1
+    }
+  },
+  "sizeGates": {
+    "maxMinimalApkExportMb": 90.0,
+    "maxTractorApkExportMb": 250.0
+  }
+}
