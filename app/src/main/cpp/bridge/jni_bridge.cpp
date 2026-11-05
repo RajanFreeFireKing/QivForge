@@ -284,9 +284,9 @@ Java_io_qivora_qivforge_engine_NativeBridge_nativeRaycast(
     jfloat maxDist,
     jfloatArray outHitData) {
     
-    physics::RayHit hit = Engine::Instance().GetPhysicsWorld().Raycast(
-        physics::Vec3{ox, oy, oz},
-        physics::Vec3{dx, dy, dz},
+    qivforge::physics::RayHit hit = Engine::Instance().GetPhysicsWorld().Raycast(
+        qivforge::physics::Vec3{ox, oy, oz},
+        qivforge::physics::Vec3{dx, dy, dz},
         maxDist
     );
 
@@ -312,7 +312,7 @@ Java_io_qivora_qivforge_engine_NativeBridge_nativeCompileScript(
     JNIEnv* env,
     jobject /* thiz */,
     jstring scriptSource,
-    jobjectArray outDiagnostics) {
+    jobjectArray /* outDiagnostics */) {
     
     if (!scriptSource) return JNI_FALSE;
     const char* srcChars = env->GetStringUTFChars(scriptSource, nullptr);
