@@ -67,9 +67,7 @@ fun VirtualTouchHud(
                     .clip(RoundedCornerShape(20.dp))
                     .background(theme.error.copy(alpha = 0.85f))
                     .pointerInput(Unit) {
-                        detectDragGestures(onDrag = { _, _ -> }) {
-                            // no-op drag
-                        }
+                        detectDragGestures { _, _ -> }
                     }
                     .padding(horizontal = 14.dp, vertical = 8.dp),
                 contentAlignment = Alignment.Center

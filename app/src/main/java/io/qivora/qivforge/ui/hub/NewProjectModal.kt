@@ -1,5 +1,6 @@
 package io.qivora.qivforge.ui.hub
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -52,7 +53,7 @@ fun NewProjectModal(
                 .padding(16.dp),
             shape = RoundedCornerShape(16.dp),
             color = theme.surface,
-            border = border(1.dp, theme.outline, RoundedCornerShape(16.dp))
+            border = BorderStroke(1.dp, theme.outline)
         ) {
             Column(
                 modifier = Modifier
