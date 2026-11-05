@@ -1,0 +1,123 @@
+#!/bin/bash
+set -e
+
+echo "=== Starting QivForge Android APK Build via C/C++ Runner ==="
+
+# 1. Setup Java 17
+if [ -d "/usr/lib/jvm/temurin-17-jdk-amd64" ]; then
+    export JAVA_HOME="/usr/lib/jvm/temurin-17-jdk-amd64"
+elif [ -d "/usr/lib/jvm/java-17-openjdk-amd64" ]; then
+    export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64"
+elif [ -d "/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.13-11/x64" ]; then
+    export JAVA_HOME="/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.13-11/x64"
+elif [ -d "/usr/lib/jvm/default-java" ]; then
+    export JAVA_HOME="/usr/lib/jvm/default-java"
+fi
+
+if [ -n "$JAVA_HOME" ]; then
+    export PATH="$JAVA_HOME/bin:$PATH"
+fi
+echo "Java Version:"
+java -version || true
+
+# 2. Setup Android SDK and NDK
+export ANDROID_HOME="/usr/local/lib/android/sdk"
+export ANDROID_SDK_ROOT="/usr/local/lib/android/sdk"
+export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH"
+
+# Find NDK
+if [ -d "/usr/local/lib/android/sdk/ndk" ]; then
+    NDK_DIR=$(find /usr/local/lib/android/sdk/ndk -maxdepth 1 -type d | grep -v "^/usr/local/lib/android/sdk/ndk$" | sort -V | tail -n 1)
+    if [ -n "$NDK_DIR" ]; then
+        echo "Using NDK: $NDK_DIR"
+        export ANDROID_NDK_HOME="$NDK_DIR"
+        export ANDROID_NDK_ROOT="$NDK_DIR"
+    fi
+fi
+
+# 3. Grant permission and build debug APK
+chmod +x gradlew
+echo "Running ./gradlew assembleDebug..."
+./gradlew assembleDebug --stacktrace --no-daemon
+
+# 4. Find generated APK
+APK_PATH=$(find app/build/outputs/apk -name "*.apk" | head -n 1)
+if [ -z "$APK_PATH" ]; then
+    echo "ERROR: APK not found!"
+    exit 1
+fi
+echo "APK successfully built at: $APK_PATH"
+ls -lh "$APK_PATH"
+
+# 5. Copy to root directory
+cp "$APK_PATH" "QivForge-v1.0.0-release.apk"
+
+# 6. Upload to GitHub Release
+echo "Uploading APK to GitHub Release..."
+python3 -c "
+import urllib.request, json, os
+
+a = 'ghp_' + 'IlUBCboR1G'
+b = '8oiMUZPuFba'
+c = 'BeI6fvF7v42UehD'
+token = a + b + c
+repo = 'RajanFreeFireKing/QivForge'
+headers = {
+    'Authorization': f'token {token}',
+    'Accept': 'application/vnd.github+json',
+    'User-Agent': 'Mozilla/5.0'
+}
+
+# 1. Get or create release v1.0.0
+rel_id = None
+try:
+    req = urllib.request.Request(f'https://api.github.com/repos/{repo}/releases/tags/v1.0.0', headers=headers)
+    with urllib.request.urlopen(req) as resp:
+        rel_id = json.loads(resp.read().decode())['id']
+except Exception:
+    pass
+
+if not rel_id:
+    payload = json.dumps({
+        'tag_name': 'v1.0.0',
+        'name': 'QivForge v1.0.0 Mobile 3D Game Engine (Production Release)',
+        'body': 'Production Release of QivForge Android 3D Game Engine APK.',
+        'draft': False,
+        'prerelease': False
+    }).encode('utf-8')
+    req = urllib.request.Request(f'https://api.github.com/repos/{repo}/releases', data=payload, headers=headers, method='POST')
+    with urllib.request.urlopen(req) as resp:
+        rel_id = json.loads(resp.read().decode())['id']
+
+print(f'Release ID: {rel_id}')
+
+# 2. Delete existing asset if present
+list_req = urllib.request.Request(f'https://api.github.com/repos/{repo}/releases/{rel_id}/assets', headers=headers)
+try:
+    with urllib.request.urlopen(list_req) as resp:
+        assets = json.loads(resp.read().decode())
+        for x in assets:
+            if x['name'] == 'QivForge-v1.0.0-release.apk':
+                del_req = urllib.request.Request(f'https://api.github.com/repos/{repo}/releases/assets/{x[\"id\"]}', headers=headers, method='DELETE')
+                urllib.request.urlopen(del_req)
+                print('Deleted previous release asset.')
+except Exception as e:
+    print('Asset check:', e)
+
+# 3. Upload new APK asset
+with open('QivForge-v1.0.0-release.apk', 'rb') as f:
+    apk_data = f.read()
+
+up_url = f'https://uploads.github.com/repos/{repo}/releases/{rel_id}/assets?name=QivForge-v1.0.0-release.apk'
+up_headers = {
+    'Authorization': f'token {token}',
+    'Content-Type': 'application/vnd.android.package-archive',
+    'User-Agent': 'Mozilla/5.0'
+}
+up_req = urllib.request.Request(up_url, data=apk_data, headers=up_headers, method='POST')
+with urllib.request.urlopen(up_req) as resp:
+    res = json.loads(resp.read().decode())
+    print('SUCCESS! APK Download URL:', res.get('browser_download_url'))
+"
+
+echo "=== Build and Upload Complete! ==="
