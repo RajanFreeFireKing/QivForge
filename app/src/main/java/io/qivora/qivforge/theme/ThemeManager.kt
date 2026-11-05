@@ -59,6 +59,8 @@ class ThemeStateHolder(initial: ThemeTokens) : androidx.compose.runtime.State<Th
     val border get() = value.border
     val dividerColor get() = value.dividerColor
     val errorColor get() = value.errorColor
+    val background get() = value.background
+    val surfaceVariant get() = value.surfaceVariant
 }
 
 /**

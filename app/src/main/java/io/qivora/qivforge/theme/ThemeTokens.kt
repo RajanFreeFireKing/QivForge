@@ -57,6 +57,44 @@ data class ThemeTokens(
     val border: Color get() = outline
     val dividerColor: Color get() = outline
     val errorColor: Color get() = error
+    val background: Color get() = surface
+    val surfaceVariant: Color get() = panel
+
+    constructor(
+        surfaceColor: Color = Color(0xFF1E1E1E),
+        backgroundColor: Color = Color(0xFF121212),
+        textColor: Color = Color(0xFFE0E0E0),
+        secondaryTextColor: Color = Color(0xFFA0A0A0),
+        primaryColor: Color = Color(0xFF4CAF50),
+        dividerColor: Color = Color(0xFF333333)
+    ) : this(
+        name = "Custom",
+        isDark = true,
+        version = 1,
+        primary = primaryColor,
+        onPrimary = Color.White,
+        secondary = primaryColor,
+        accent = primaryColor,
+        surface = surfaceColor,
+        panel = backgroundColor,
+        panelAlt = backgroundColor,
+        onSurface = textColor,
+        onSurfaceMuted = secondaryTextColor,
+        outline = dividerColor,
+        success = Color(0xFF4CAF50),
+        warning = Color(0xFFFF9800),
+        error = Color(0xFFF44336),
+        nodeEvent = Color(0xFFE91E63),
+        nodePhysics = Color(0xFF2196F3),
+        nodeAnim = Color(0xFF9C27B0),
+        nodeCloud = Color(0xFF00BCD4),
+        codeKeyword = Color(0xFFCC7832),
+        codeType = Color(0xFF6A8759),
+        codeString = Color(0xFF6A8759),
+        codeNumber = Color(0xFF6897BB),
+        codeComment = Color(0xFF808080),
+        codeError = Color(0xFFBC3F3C)
+    )
 
     fun toJson(): String {
         val obj = JSONObject()
